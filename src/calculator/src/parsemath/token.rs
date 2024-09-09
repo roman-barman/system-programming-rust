@@ -1,4 +1,3 @@
-#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Add,
     Subtract,
@@ -18,4 +17,15 @@ pub enum OperPrec {
     MulDiv,
     Power,
     Negative,
+}
+
+impl Token {
+    pub fn get_oper_prec(&self) -> OperPrec {
+        match *self {
+            Token::Add | Token::Subtract => OperPrec::AddSub,
+            Token::Multiply | Token::Divide => OperPrec::MulDiv,
+            Token::Caret => OperPrec::Power,
+            _ => OperPrec::DefaultZero,
+        }
+    }
 }

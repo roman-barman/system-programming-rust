@@ -96,6 +96,40 @@ impl<'a> Parser<'a> {
 
         Ok(left_expr)
     }
+
+    fn convert_token_to_node(&mut self, left_exp: Node) -> Result<Node, ParseError> {
+        match self.current_token {
+            Token::Add => {
+                self.get_next_token()?;
+                let right_expr = self.generate_ast(OperPrec::AddSub)?;
+                Ok(Node::Add(Box::new(left_exp), Box::new(right_expr)))
+            }
+            Token::Subtract => {
+                self.get_next_token()?;
+                let right_expr = self.generate_ast(OperPrec::AddSub)?;
+                Ok(Node::Subtract(Box::new(left_exp), Box::new(right_expr)))
+            }
+            Token::Multiply => {
+                self.get_next_token()?;
+                let right_expr = self.generate_ast(OperPrec::MulDiv)?;
+                Ok(Node::Multiply(Box::new(left_exp), Box::new(right_expr)))
+            }
+            Token::Divide => {
+                self.get_next_token()?;
+                let right_expr = self.generate_ast(OperPrec::MulDiv)?;
+                Ok(Node::Divide(Box::new(left_exp), Box::new(right_expr)))
+            }
+            Token::Caret => {
+                self.get_next_token()?;
+                let right_expr = self.generate_ast(OperPrec::Power)?;
+                Ok(Node::Caret(Box::new(left_exp), Box::new(right_expr)))
+            }
+            _ => Err(ParseError::InvalidOperator(format!(
+                "Please enter valid operator {:?}",
+                self.current_token
+            ))),
+        }
+    }
 }
 
 #[derive(Debug)]
