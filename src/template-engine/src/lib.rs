@@ -1,14 +1,20 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+#[derive(PartialEq, Debug)]
+pub enum ContentType {
+    Literal(String),
+    TemplateVariable(ExpressionData),
+    Tag(TagType),
+    Unrecognized,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[derive(PartialEq, Debug)]
+pub enum TagType {
+    ForTag,
+    IfTag,
+}
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+#[derive(PartialEq, Debug)]
+pub struct ExpressionData {
+    pub head: Option<String>,
+    pub variable: String,
+    pub tail: Option<String>,
 }
