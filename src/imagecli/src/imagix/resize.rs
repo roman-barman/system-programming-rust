@@ -1,5 +1,6 @@
 use std::{fmt, fs, io};
 use std::path::PathBuf;
+use std::str::FromStr;
 use std::time::{Duration, Instant};
 use image::ImageFormat;
 use super::error::ImagixError;
@@ -10,6 +11,78 @@ impl Elapsed {
     fn from(start: &Instant) -> Self {
         Elapsed(start.elapsed())
     }
+}
+
+#[derive(Debug)]
+pub enum SizeOption {
+    Small,
+    Medium,
+    Large,
+}
+
+impl FromStr for SizeOption {
+    type Err = ImagixError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "small" => Ok(SizeOption::Small),
+            "medium" => Ok(SizeOption::Medium),
+            "large" => Ok(SizeOption::Large),
+            _ => Ok(SizeOption::Small),
+            //default
+        }
+    }
+}
+
+#[derive(Debug, PartialEq)]
+pub enum Mode {
+    Single,
+    All,
+}
+
+impl FromStr for Mode {
+    type Err = ImagixError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "single" => Ok(Mode::Single),
+            "all" => Ok(Mode::All),
+            _ => Err(ImagixError::UserInputError(
+                "Wrong value for mode".to_string(),
+            )),
+        }
+    }
+}
+
+pub fn process_resize_request(
+    size: SizeOption,
+    mode: Mode,
+    src_folder: &mut PathBuf,
+) -> Result<(), ImagixError> {
+    let size = match size {
+        SizeOption::Small => 200,
+        SizeOption::Medium => 400,
+        SizeOption::Large => 800,
+    };
+    let _ = match mode {
+        Mode::All => resize_all(size, src_folder)?,
+        Mode::Single => resize_single(size, src_folder)?,
+    };
+    Ok(())
+}
+
+fn resize_single(size: u32, src_folder: &mut PathBuf) -> Result<(), ImagixError> {
+    let mut src_folder = src_folder;
+    // Get file stem from src_folder
+    resize_image(size, &mut src_folder)?;
+    Ok(())
+}
+
+fn resize_all(size: u32, src_folder: &mut PathBuf) -> Result<(), ImagixError> {
+    if let Ok(entries) = get_image_files(src_folder.to_path_buf()) {
+        for mut entry in entries {
+            resize_image(size, &mut entry)?;
+        }
+    };
+    Ok(())
 }
 
 impl fmt::Display for Elapsed {
