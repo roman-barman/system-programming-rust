@@ -5,9 +5,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src/calculator/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/template-engine/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/imagecli/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rstat/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/src/calculator/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/template-engine/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/imagecli/target" />
+      <excludeFolder url="file://$MODULE_DIR$/src/rstat/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
