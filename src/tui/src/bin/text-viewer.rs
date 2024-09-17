@@ -67,8 +67,20 @@ impl TextViewer {
             style::Reset
         );
 
-        for line in 0..self.doc_length {
-            println!("{}\r", self.doc.lines[line as usize]);
+        if self.doc_length < self.terminal_size.y {
+            for line in 0..self.doc_length {
+                println!("{}\r", self.doc.lines[line as usize]);
+            }
+        } else {
+            if pos.y <= self.terminal_size.y {
+                for line in 0..self.terminal_size.y - 3 {
+                    println!("{}\r", self.doc.lines[line as usize]);
+                }
+            } else {
+                for line in pos.y - (self.terminal_size.y - 3)..pos.y {
+                    println!("{}\r", self.doc.lines[line as usize]);
+                }
+            }
         }
 
         println!(
@@ -95,6 +107,47 @@ impl TextViewer {
         );
     }
 
+    fn inc_x(&mut self) {
+        if self.cur_pos.x < self.terminal_size.x {
+            self.cur_pos.x += 1;
+        }
+        println!(
+            "{}",
+            termion::cursor::Goto(self.cur_pos.x as u16, self.cur_pos.y as u16)
+        );
+    }
+
+    fn dec_x(&mut self) {
+        if self.cur_pos.x > 1 {
+            self.cur_pos.x -= 1;
+        }
+        println!(
+            "{}",
+            termion::cursor::Goto(self.cur_pos.x as u16, self.cur_pos.y as u16)
+        );
+    }
+
+    fn inc_y(&mut self) {
+        if self.cur_pos.y < self.doc_length {
+            self.cur_pos.y += 1;
+        }
+
+        println!(
+            "{}",
+            termion::cursor::Goto(self.cur_pos.x as u16, self.cur_pos.y as u16)
+        );
+    }
+
+    fn dec_y(&mut self) {
+        if self.cur_pos.y > 1 {
+            self.cur_pos.y -= 1;
+        }
+        println!(
+            "{}",
+            termion::cursor::Goto(self.cur_pos.x as u16, self.cur_pos.y as u16)
+        );
+    }
+
     fn run(&mut self) {
         let mut stdout = stdout().into_raw_mode().unwrap();
         let stdin = stdin();
@@ -102,6 +155,25 @@ impl TextViewer {
             match c.unwrap() {
                 Key::Ctrl('q') => {
                     break;
+                }
+                Key::Left => {
+                    self.dec_x();
+                    self.show_document();
+                }
+                Key::Right => {
+                    self.inc_x();
+                    self.show_document();
+                }
+                Key::Up => {
+                    self.dec_y();
+                    self.show_document();
+                }
+                Key::Down => {
+                    self.inc_y();
+                    self.show_document();
+                }
+                Key::Backspace => {
+                    self.dec_x();
                 }
                 _ => {}
             }
