@@ -8,12 +8,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/rstat/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/tui/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/shell/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/tcpproxy/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/src/calculator/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/template-engine/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/imagecli/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/rstat/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/tui/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/shell/target" />
+      <excludeFolder url="file://$MODULE_DIR$/src/tcpproxy/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
